@@ -34,13 +34,15 @@ Crypto traders and analysts need to react instantly when news sentiment diverges
 -> **Status**: 🚧 Coming end of Week 1.
 
 ```bash
-git clone git@github.com:REPLACE_USER/crypto-sentiment-platform.git
+git clone git@github.com:AndresFPerezG/crypto-sentiment-platform.git
 cd crypto-sentiment-platform
 make up           # Start local stack
 make demo         # Run demo ingestion
 ```
 
 ## 📂 Project Structure
+
+```text
 .
 ├── ingestion/         # dlt pipelines + custom Python ingestors
 ├── transformations/   # dbt project (staging → intermediate → marts)
@@ -51,6 +53,7 @@ make demo         # Run demo ingestion
 ├── dashboard/         # Streamlit + Evidence.dev dashboards
 ├── docs/              # Architecture, ADRs, runbooks
 └── tests/             # Unit, integration, e2e tests
+```
 
 ## 📖 Documentation
 
@@ -75,6 +78,6 @@ MIT — see [LICENSE](./LICENSE).
 
 ## 👤 Author
 
-**Andres Felipe Pérez Guizaho** — Data Analyst transitioning to Data Engineering
+**Andrés Felipe Pérez Guizaho** — Data Analyst transitioning to Data Engineering
 - LinkedIn: www.linkedin.com/in/andresperez-data-analyst
 - Github: https://github.com/AndresFPerezG
