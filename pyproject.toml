@@ -1,0 +1,129 @@
+[project]
+name = "crypto-sentiment-platform"
+version = "0.1.0"
+description = "End-to-end data engineering platform: crypto trades + news sentiment correlation"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { file = "LICENSE" }
+authors = [
+    { name = "Andres", email = "tu_email@example.com" }
+]
+keywords = ["data-engineering", "lakehouse", "streaming", "iceberg", "dbt"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+]
+
+dependencies = [
+    "httpx>=0.28.0",
+    "websockets>=14.1",
+    "structlog>=24.4.0",
+    "pydantic>=2.10.0",
+    "pydantic-settings>=2.7.0",
+    "tenacity>=9.0.0",
+    "typer>=0.15.0",
+    "python-dotenv>=1.0.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.0",
+    "pytest-asyncio>=0.24.0",
+    "pytest-cov>=6.0.0",
+    "ruff>=0.8.4",
+    "mypy>=1.13.0",
+    "pre-commit>=4.0.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["ingestion", "streaming", "orchestration"]
+
+# ==========================================================================
+# Ruff — linter + formatter (replaces black, flake8, isort)
+# ==========================================================================
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+extend-exclude = ["migrations", "dbt_packages", "target"]
+
+[tool.ruff.lint]
+select = [
+    "E",     # pycodestyle errors
+    "W",     # pycodestyle warnings
+    "F",     # pyflakes
+    "I",     # isort
+    "B",     # flake8-bugbear
+    "C4",    # flake8-comprehensions
+    "UP",    # pyupgrade
+    "SIM",   # flake8-simplify
+    "ASYNC", # flake8-async
+    "S",     # flake8-bandit (security)
+    "N",     # pep8-naming
+    "RUF",   # ruff-specific rules
+]
+ignore = [
+    "S101",  # Allow assert in tests
+    "E501",  # Line too long (handled by formatter)
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["S101", "S105", "S106"]  # Allow asserts and hardcoded passwords in tests
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+# ==========================================================================
+# Mypy — strict type checking
+# ==========================================================================
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false
+
+# ==========================================================================
+# Pytest
+# ==========================================================================
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests", "ingestion/tests", "streaming/tests"]
+python_files = ["test_*.py", "*_test.py"]
+asyncio_mode = "auto"
+addopts = [
+    "-v",
+    "--strict-markers",
+    "--cov-report=term-missing",
+    "--cov-report=html",
+]
+
+[tool.coverage.run]
+source = ["ingestion", "streaming", "orchestration"]
+omit = ["*/tests/*", "*/__init__.py"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+]
